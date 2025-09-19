@@ -1,5 +1,5 @@
 ### EX3 Implementation of GSP Algorithm In Python
-### DATE: 12/09/2025
+### DATE: 19.09.2025
 ### AIM: To implement GSP Algorithm In Python.
 ### Description:
 The Generalized Sequential Pattern (GSP) algorithm is a data mining technique used for discovering frequent patterns within a sequence database. It operates by identifying sequences that frequently occur together. GSP works by employing a depth-first search strategy to explore and extract frequent patterns efficiently.
@@ -37,32 +37,33 @@ for each wear category.</p>
 8. Visulaize the sequence patterns using matplotlib.
 </p>
 ### Program:
-~~~
+
+```
 from collections import defaultdict
 from itertools import combinations
 
-Function to generate candidate k-item sequences
+# Function to generate candidate k-item sequences
 def generate_candidates(dataset, k):
     c = defaultdict(int)
     for seq in dataset:
-         flatten into list of items (your version mixes strings/lists)
+        # flatten into list of items (your version mixes strings/lists)
         flat_seq = []
         for itemset in seq:
             if isinstance(itemset, str):
                 flat_seq.extend(itemset.split(','))   # split commas
             else:
                 flat_seq.extend(itemset)
-        ensure uniqueness per sequence
+        # ensure uniqueness per sequence
         for comb in set(combinations(sorted(flat_seq), k)):
             c[comb] += 1
-    collect all frequent patterns
+    # collect all frequent patterns
     res = {}
     for item, support in c.items():
         if support >= min_support:
             res[item] = support
     return res
 
-Function to perform GSP algorithm
+# Function to perform GSP algorithm
 def gsp(dataset, min_support):
     k = 1
     fp = defaultdict(int)
@@ -74,7 +75,8 @@ def gsp(dataset, min_support):
         fp.update(c)
         k += 1
     return fp
- Example dataset for each category
+
+# Example dataset for each category
 top_wear_data = [
     [["a"],["b"],["c"],["b","e"],["c","f"],["g"],["a","b","e"]],
     [["a"],["d"],["b","c"],["c"],["f","g"],["c","h"]],
@@ -88,14 +90,14 @@ bottom_wear_data = [
     [["b","e"],["c","e"],["d"]],
     [["a"],["b","d"],["b"],["c"],["b"],["a","d","e"]]
 ]
- Minimum support threshold
+# Minimum support threshold
 min_support = 3
 
- Perform GSP algorithm for each category
+# Perform GSP algorithm for each category
 top_wear_result = gsp(top_wear_data, min_support)
 bottom_wear_result = gsp(bottom_wear_data, min_support)
 
- Output the frequent sequential patterns for each category
+# Output the frequent sequential patterns for each category
 print("Frequent Sequential Patterns - Top Wear:")
 if top_wear_result:
     for pattern, support in top_wear_result.items():
@@ -109,12 +111,18 @@ if bottom_wear_result:
         print(f"Pattern: {pattern}, Support: {support}")
 else:
     print("No frequent sequential patterns found in Bottom Wear.")
-~~~
-### Visualization:
-~~~
-import matplotlib.pyplot as plt
 
- Function to visualize frequent sequential patterns with a line plot
+```
+
+### Output:
+
+<img width="1127" height="685" alt="image" src="https://github.com/user-attachments/assets/443ca7ce-d8cb-4c68-90e6-cbbf158924d2" />
+
+
+### Visualization:
+```import matplotlib.pyplot as plt
+
+# Function to visualize frequent sequential patterns with a line plot
 def visualize_patterns_line(result, category):
     if result:
         patterns = list(result.keys())
@@ -131,18 +139,14 @@ def visualize_patterns_line(result, category):
     else:
         print(f"No frequent sequential patterns found in {category}.")
 
- Visualize frequent sequential patterns for each category using a line plot
+# Visualize frequent sequential patterns for each category using a line plot
 visualize_patterns_line(top_wear_result, 'Top Wear')
 visualize_patterns_line(bottom_wear_result, 'Bottom Wear')
-~~~
-
+```
 ### Output:
-<img width="832" height="984" alt="image" src="https://github.com/user-attachments/assets/970fa277-a2ee-4bfd-8071-439b5e76fb09" />
+<img width="989" height="590" alt="image" src="https://github.com/user-attachments/assets/f32f4a65-0a9f-42e0-8a41-1fa696f02fe5" />
 
-### visualization output:
-<img width="1132" height="595" alt="image" src="https://github.com/user-attachments/assets/fd027d38-8038-4ef8-b392-b7eb2fafb08c" />
-<img width="1174" height="664" alt="Screenshot 2025-09-19 104252" src="https://github.com/user-attachments/assets/14c5f7ff-dce9-4642-871c-ee9019f8949c" />
-
+<img width="989" height="590" alt="image" src="https://github.com/user-attachments/assets/91f44651-5425-4110-9a3c-f3a62c8bbadd" />
 
 ### Result:
-Thus the implement GSP Algorithm In Python is executed successfully.
+Thus the implementation of the GSP algorithm in python has been successfully executed.
