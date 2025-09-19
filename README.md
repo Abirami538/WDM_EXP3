@@ -41,28 +41,28 @@ for each wear category.</p>
 from collections import defaultdict
 from itertools import combinations
 
-# Function to generate candidate k-item sequences
+Function to generate candidate k-item sequences
 def generate_candidates(dataset, k):
     c = defaultdict(int)
     for seq in dataset:
-        # flatten into list of items (your version mixes strings/lists)
+         flatten into list of items (your version mixes strings/lists)
         flat_seq = []
         for itemset in seq:
             if isinstance(itemset, str):
                 flat_seq.extend(itemset.split(','))   # split commas
             else:
                 flat_seq.extend(itemset)
-        # ensure uniqueness per sequence
+        ensure uniqueness per sequence
         for comb in set(combinations(sorted(flat_seq), k)):
             c[comb] += 1
-    # collect all frequent patterns
+    collect all frequent patterns
     res = {}
     for item, support in c.items():
         if support >= min_support:
             res[item] = support
     return res
 
-# Function to perform GSP algorithm
+Function to perform GSP algorithm
 def gsp(dataset, min_support):
     k = 1
     fp = defaultdict(int)
@@ -74,8 +74,7 @@ def gsp(dataset, min_support):
         fp.update(c)
         k += 1
     return fp
-
-# Example dataset for each category
+ Example dataset for each category
 top_wear_data = [
     [["a"],["b"],["c"],["b","e"],["c","f"],["g"],["a","b","e"]],
     [["a"],["d"],["b","c"],["c"],["f","g"],["c","h"]],
@@ -89,14 +88,14 @@ bottom_wear_data = [
     [["b","e"],["c","e"],["d"]],
     [["a"],["b","d"],["b"],["c"],["b"],["a","d","e"]]
 ]
-# Minimum support threshold
+ Minimum support threshold
 min_support = 3
 
-# Perform GSP algorithm for each category
+ Perform GSP algorithm for each category
 top_wear_result = gsp(top_wear_data, min_support)
 bottom_wear_result = gsp(bottom_wear_data, min_support)
 
-# Output the frequent sequential patterns for each category
+ Output the frequent sequential patterns for each category
 print("Frequent Sequential Patterns - Top Wear:")
 if top_wear_result:
     for pattern, support in top_wear_result.items():
@@ -115,7 +114,7 @@ else:
 ~~~
 import matplotlib.pyplot as plt
 
-# Function to visualize frequent sequential patterns with a line plot
+ Function to visualize frequent sequential patterns with a line plot
 def visualize_patterns_line(result, category):
     if result:
         patterns = list(result.keys())
@@ -132,7 +131,7 @@ def visualize_patterns_line(result, category):
     else:
         print(f"No frequent sequential patterns found in {category}.")
 
-# Visualize frequent sequential patterns for each category using a line plot
+ Visualize frequent sequential patterns for each category using a line plot
 visualize_patterns_line(top_wear_result, 'Top Wear')
 visualize_patterns_line(bottom_wear_result, 'Bottom Wear')
 ~~~
