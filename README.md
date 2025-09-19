@@ -37,8 +37,7 @@ for each wear category.</p>
 8. Visulaize the sequence patterns using matplotlib.
 </p>
 ### Program:
-
-```
+~~~
 from collections import defaultdict
 from itertools import combinations
 
@@ -46,21 +45,30 @@ from itertools import combinations
 def generate_candidates(dataset, k):
     c = defaultdict(int)
     for seq in dataset:
-        for comb in combinations(seq, k):
+        # flatten into list of items (your version mixes strings/lists)
+        flat_seq = []
+        for itemset in seq:
+            if isinstance(itemset, str):
+                flat_seq.extend(itemset.split(','))   # split commas
+            else:
+                flat_seq.extend(itemset)
+        # ensure uniqueness per sequence
+        for comb in set(combinations(sorted(flat_seq), k)):
             c[comb] += 1
-    # collect all frequent patterns, not just one
-    result = {}
-    for items, support in c.items():
+    # collect all frequent patterns
+    res = {}
+    for item, support in c.items():
         if support >= min_support:
-            result[items] = support
-    return result
+            res[item] = support
+    return res
 
 # Function to perform GSP algorithm
 def gsp(dataset, min_support):
     k = 1
-    fp = {}
+    fp = defaultdict(int)
+    seq=dataset
     while True:
-        c = generate_candidates(dataset, k)
+        c = generate_candidates(seq, k)
         if not c:
             break
         fp.update(c)
@@ -69,31 +77,24 @@ def gsp(dataset, min_support):
 
 # Example dataset for each category
 top_wear_data = [
-    ["blouse", "t-shirt", "tank_top"],
-    ["hoodie", "sweater", "top"],
-    ["hoodie"],
-    ["hoodie", "sweater"]
+    [["a"],["b"],["c"],["b","e"],["c","f"],["g"],["a","b","e"]],
+    [["a"],["d"],["b","c"],["c"],["f","g"],["c","h"]],
+    [["b"],["c"],["a","d"],["e"],["b"],["f"],["c","d","f","g","h"]],
+    [["c"],["e","c"],["e","h"]]
 ]
 bottom_wear_data = [
-    ["jeans", "trousers", "shorts"],
-    ["leggings", "skirt", "chinos"],
+    [["b","d"],["c"],["b"],["a","c"]],
+    [["b","f"],["c","e"],["b"],["f","g"]],
+    [["a","h"],["b","f"],["a"],["b","f"]],
+    [["b","e"],["c","e"],["d"]],
+    [["a"],["b","d"],["b"],["c"],["b"],["a","d","e"]]
 ]
-party_wear_data = [
-    ["cocktail_dress", "evening_gown", "blazer"],
-    ["party_dress", "formal_dress", "suit"],
-    ["party_dress", "formal_dress", "suit"],
-    ["party_dress", "formal_dress", "suit"],
-    ["party_dress", "formal_dress", "suit"],
-    ["party_dress"], ["party_dress"],
-]
-
 # Minimum support threshold
-min_support = 2
+min_support = 3
 
 # Perform GSP algorithm for each category
 top_wear_result = gsp(top_wear_data, min_support)
 bottom_wear_result = gsp(bottom_wear_data, min_support)
-party_wear_result = gsp(party_wear_data, min_support)
 
 # Output the frequent sequential patterns for each category
 print("Frequent Sequential Patterns - Top Wear:")
@@ -109,17 +110,9 @@ if bottom_wear_result:
         print(f"Pattern: {pattern}, Support: {support}")
 else:
     print("No frequent sequential patterns found in Bottom Wear.")
-
-print("\nFrequent Sequential Patterns - Party Wear:")
-if party_wear_result:
-    for pattern, support in party_wear_result.items():
-        print(f"Pattern: {pattern}, Support: {support}")
-else:
-    print("No frequent sequential patterns found in Party Wear.")
-
-```
+~~~
 ### Visualization:
-```python
+~~~
 import matplotlib.pyplot as plt
 
 # Function to visualize frequent sequential patterns with a line plot
@@ -142,16 +135,14 @@ def visualize_patterns_line(result, category):
 # Visualize frequent sequential patterns for each category using a line plot
 visualize_patterns_line(top_wear_result, 'Top Wear')
 visualize_patterns_line(bottom_wear_result, 'Bottom Wear')
-visualize_patterns_line(party_wear_result, 'Party Wear')
-```
+~~~
 
 ### Output:
-<img width="702" height="392" alt="image" src="https://github.com/user-attachments/assets/ca7a2f11-1461-41bb-88df-2c4abc6084aa" />
+<img width="832" height="984" alt="image" src="https://github.com/user-attachments/assets/970fa277-a2ee-4bfd-8071-439b5e76fb09" />
 
 ### visualization output:
-
-<img width="1154" height="725" alt="image" src="https://github.com/user-attachments/assets/309f6e37-eef9-4989-8a44-2de802122d3c" />
-<img width="1143" height="679" alt="image" src="https://github.com/user-attachments/assets/2613998d-099c-4328-928e-c3a86b70a85f" />
+<img width="1132" height="595" alt="image" src="https://github.com/user-attachments/assets/fd027d38-8038-4ef8-b392-b7eb2fafb08c" />
+<img width="1174" height="664" alt="Screenshot 2025-09-19 104252" src="https://github.com/user-attachments/assets/14c5f7ff-dce9-4642-871c-ee9019f8949c" />
 
 
 ### Result:
